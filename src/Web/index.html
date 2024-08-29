@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<style type="text/css">
+		.toggle {
+		  display: inline-block;
+		  position: relative;
+		  width: 70px;
+		  height: 34px;
+		  margin-left: 25px;
+		}
+
+		.toggle input[type="checkbox"] {
+		  display: none;
+		}
+
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #FF0000;
+		  transition: .4s;
+		  border-radius: 25px;
+		}
+
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 26px;
+		  width: 26px;
+		  left: 4px;
+		  bottom: 4px;
+		  background-color: #E4E6E5;
+		  transition: .4s;
+		  border-radius: 45px;
+		}
+
+		input[type="checkbox"]:checked + .slider {
+		  background-color: #00FF00;
+		}
+
+		input[type="checkbox"]:checked + .slider:before {
+		  transform: translateX(35px);
+		}
+
+		.label-text {
+		  color: #E4E6E5;
+		  font-size: 12px;
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		  font-weight: bold;
+		}
+
+		body{
+			background-color: lightgray;
+		}
+
+		#main{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 70%;
+		}
+
+		#article{
+			background-color: white;
+			height: 770px;
+			width:60%;
+			margin: 10px;
+		}
+
+		#aside{
+			background-color: white;
+			height: 770px;
+			width:30%;
+			margin: 10px;
+			vertical-align: center;
+		}
+
+		#content{
+			display: inline-block;
+		  	position: relative;
+			top: 40%;
+		  	left: 40%;
+		  	width: 100%;
+		  	height: 100%;
+		}
+
+		.content{
+			display: inline-block;
+		  	position: relative;
+			top: 20%;
+		  	left: 30%;
+		  	width: 100%;
+		  	height: 100%;
+		}
+
+		h1{
+			background-color: #6BA2E4;
+			color: #E4E6E5;
+			height: 70px;
+			width: 91%;
+			margin: auto;
+			text-align: center;
+		}
+
+	</style>
+	<script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+</head>
+<body>
+	<h1>	Home</h1>
+	<div id="main">
+		<div id="article">
+			<p class="content">
+				Is_Pump_Active : <span id="pump">1 </span><br/><br/>
+				Water Level Remaining[%] : <span id="tank">0</span> <br/><br/>
+				Moisture_Sensor_1 : <span id="soil1">0</span> <br/><br/>
+				Moisture_Sensor_2 : <span id="soil2">0</span> <br/><br/>
+				Moisture_Sensor_3 : <span id="soil3">0</span> <br/><br/>
+				Temperature[°C] : <span id="temp">0</span> <br/><br/>
+				Humidity[%] : <span id="hum">0</span> <br/><br/>
+				WindSpeed[Km/H] : <span id="wind">0</span> <br/><br/>
+				IR : <span id="ir">0</span> <br/><br/>
+				UV : <span id="uv">0</span> <br/><br/>
+				Light Intensity : <span id="light">0</span> <br/><br/>
+				Carbon Monoxid[ppm] : <span id="carbon">0</span> <br/><br/>
+				LPG : <span id="lpg">0</span> <br/><br/>
+				Smoke : <span id="smoke">0</span>
+			</p>
+		</div>
+		<div id="aside">
+			<div id="content">
+				<h3>Pump Activate</h3>
+				<label class="toggle">
+				  <input type="checkbox">
+				  <span class="slider"></span>
+				  <span class="label-text">ON&nbsp;&nbsp;&nbsp;&nbsp;OFF</span>
+				</label>
+			</div>
+			
+		</div>
+	</div>
+	<script type="text/javascript">
+
+		const toggle = document.querySelector('.toggle input[type="checkbox"]');
+		$.ajaxSetup({timeout:1000});
+
+		toggle.addEventListener('change', function() {
+		  if (this.checked) {
+		    var xhttp = new XMLHttpRequest();
+		    xhhtp.open("GET", "01", true);
+		    xhttp.send();
+		    toggle.parentNode.style.backgroundImage = "linear-gradient(to right, #008000, #32cd32, #9acd32, #556b2f)";
+		  } else {
+		    var xhttp = new XMLHttpRequest();
+		    xhhtp.open("GET", "00", true);
+		    xhttp.send();		    
+		    toggle.parentNode.style.backgroundImage = "linear-gradient(to right, #a52a2a, #8b0000, #ff6347, #fa8072)";
+		  }
+		});
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("pump").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirPump", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("tank").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirTank", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil1").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil1", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil2").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil2", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil3").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil3", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("temp").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirTemp", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("hum").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirHum", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("wind").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirWind", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("ir").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirIr", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("uv").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirUv", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("light").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirLight", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("carbon").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirCarbon", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("lpg").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirLpg", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("smoke").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSmoke", true);
+		    xhttp.send();
+		}, 2000);
+
+	</script>
+
+</body>
+</html>

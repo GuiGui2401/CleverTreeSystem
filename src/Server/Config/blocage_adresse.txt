@@ -1,0 +1,22 @@
+//Bloquer les adresses ip sur Raspberry pi
+
+- Installer le pare-feu ufw
+                  sudo apt-get install ufw
+
+- Autoriser la connexion par ssh
+                   sudo ufw allow ssh
+
+- Activer le pare-feu ufw
+                   sudo ufw enable
+
+- Bloquer les connexions de la plage d'adresse non autorisée après calcul et autorisé celles permises
+                    sudo ufw deny from 192.168.1.0/25
+                    sudo ufw allow from 192.168.1.128/26
+                    sudo ufw allow from 192.168.1.192/27
+                    sudo ufw allow from 192.168.1.224/28
+                    sudo ufw deny from 192.168.1.240/28
+
+- Afficher les règles configurer sur ufw
+                    sudo ufw status verbose
+
+- Rédémarrer le raspberry pi

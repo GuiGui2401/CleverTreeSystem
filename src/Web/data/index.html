@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Home</title>
+	<meta charset="utf-8" >
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script>
+		// Fonction pour actualiser la page
+		function actualiserPage() {
+			location.reload(); // Rafraîchit la page
+		}
+	
+		// Temps en millisecondes entre chaque rafraîchissement (par exemple, 5 secondes = 5000 ms)
+		var tempsActualisation = 5000;
+	
+		// Appeler la fonction actualiserPage() après le temps donné
+		setTimeout(actualiserPage, tempsActualisation);
+	</script>
+	
+	<style type="text/css">
+		.toggle {
+		  display: inline-block;
+		  position: relative;
+		  width: 70px;
+		  height: 34px;
+		  margin-left: 25px;
+		}
+
+		.toggle input[type="checkbox"] {
+		  display: none;
+		}
+
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #FF0000;
+		  transition: .4s;
+		  border-radius: 25px;
+		}
+
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 26px;
+		  width: 26px;
+		  left: 4px;
+		  bottom: 4px;
+		  background-color: #E4E6E5;
+		  transition: .4s;
+		  border-radius: 45px;
+		}
+
+		input[type="checkbox"]:checked + .slider {
+		  background-color: #0c780c;
+		}
+
+		input[type="checkbox"]:checked + .slider:before {
+		  transform: translateX(35px);
+		}
+
+		.label-text {
+		  color: #E4E6E5;
+		  font-size: 12px;
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		  font-weight: bold;
+		}
+
+		body{
+			background-color: white;
+			font-family: 'Trebuchet MS', sans-serif;
+		}
+
+		#main{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 800px;
+			margin-top: 50px;
+			font-weight: bold;
+		}
+
+		#article{
+			background-color: white;
+			height: 110%;
+			width:60%;
+			margin: 10px;
+		}
+
+		#aside{
+			background-color: white;
+			height: 110%;
+			width:30%;
+			margin: 10px;
+			vertical-align: middle;
+		}
+
+		#content{
+			display: inline-block;
+		  	position: relative;
+		  	width: 100%;
+		  	height: 100%;
+		  	top: 40%;
+		  	left: 40%;
+		}
+
+		.content{
+			/* display: inline-block; */
+			position: relative;
+			width: 100%;
+			height: 100%;
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-gap: 10px;
+			grid-auto-rows: minmax(200px, 200px);
+			TEXT-ALIGN: center;
+			/* border: none; */
+		}
+
+		h1{
+			/*background-color: #6BA2E4;*/
+			height: 70px;
+			width: 91%;
+			margin: auto;
+			text-align: center;
+		}
+
+		/*stylisons le niveau d'eau*/
+
+		.bubble-container {
+		  width: 120px;
+		  height: 120px;
+		  position: relative;
+		  border: 6px solid #00a2ff;
+		  border-radius: 50% 50% 50% 30%;
+		  padding: 10px;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  margin: auto;
+		  top: 15px;
+		}
+
+		.bubble {
+		  width: 100%;
+		  height: 100%;
+		  border-radius: 50%;
+		  border: 6px solid #fff;
+		  position: relative;
+		  overflow: hidden;
+		  align-content: center;
+		}
+
+		.water-level {
+		  position: absolute;
+		  bottom: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 0%;
+		  background-color: #00a2ff;
+		  transition: height 0.5s ease-out;
+		  border-top-left-radius: 50%;
+		  border-top-right-radius: -50%;
+		}
+
+		.tank {
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		  font-size: 24px;
+		  font-weight: bold;
+		  color: #ccc;
+		}
+
+		/*stylisons les demis cercles*/
+
+		.container {
+		  width: 200px;
+		  /* height: 200px; */
+		  /* position: relative; */
+		  top: 30%;
+		  left: 50%;
+		  /* overflow: hidden; */
+		  text-align: center;
+		  transform: translate(-50%, -50%);
+		}
+		.gauge-a {
+		  z-index: 1;
+		  position: absolute;
+		  background-color: rgba(255,255,255,.2);
+		  width: 200px;
+		  height: 200px;
+		  top: 0%;
+		  border-radius: 250px 250px 0px 0px;
+		}
+		.gauge-b {
+		  z-index: 3;
+		  position: absolute;
+		  background-color: #222;
+		  width: 125px;
+		  height: 62.5px;
+		  top: 37.5px;
+		  margin-left: 37.5px;
+		  margin-right: auto;
+		  border-radius: 250px 250px 0px 0px;
+		}
+		.gauge-cW, .gauge-cL, .gauge-cC, .gauge-cLPG {
+		  z-index: 2;
+		  position: absolute;
+		  background-color: #5664F9;
+		  width: 200px;
+		  height: 100px;
+		  top: 100px;
+		  margin-left: auto;
+		  margin-right: auto;
+		  border-radius: 0px 0px 200px 200px;
+		  transform-origin: center top;
+		  transition: all 1.3s ease-in-out;
+		}
+		.container:hover .gauge-data { color: rgba(255,255,255,1); }
+		.gauge-data {
+		  z-index: 4;
+		  color: rgba(255,255,255,.2);
+		  font-size: 0.75em;
+		  line-height: 25px;
+		  position: absolute;
+		  width: 200px;
+		  height: 100px;
+		  top: 55px;
+		  margin-left: auto;
+		  margin-right: auto;
+		  transition: all 1s ease-out;
+		}
+
+		/*stylisons les cercles pleins*/
+		.progress-circleIr, .progress-circleUv{
+		  position: relative;             /* pour servir de référent */
+		  box-sizing: border-box;         /* prise en compte bordure dans la dimension */
+		  font-size: 6em;                 /* pour définir les dimensions */
+		  width: 1.5em;                     /* fixe la largeur */
+		  height: 1.5em;                    /* fixe la hauteur */
+		  border-radius: 50%;             /* rendu aspect circulaire */
+		  border: .15em solid #CDE;       /* couleur de fond de l'anneau */
+		  background-color: #FFF;         /* couleur de fond de la progress bar */
+		  margin: auto;
+		}
+
+		.progress-masque {
+		  position: absolute;
+		  width: 1.5em;                     /* 100% de la largeur */
+		  height: 1.5em;                    /* 100% de la hauteur */
+		  left: -.155em;                   /* décalage de la largeur bordure de la gauge */
+		  top: -.155em;                    /* décalage de la largeur bordure de la gauge */
+		  clip: rect(0, 1.5em, 1.5em, .75em);  /* par défaut seule la partie droite est visible */
+		}
+
+		.progress-circleIr[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-masque,
+		.progress-circleIr[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-masque,
+		.progress-circleIr[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-masque,
+		.progress-circleIr[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-masque,
+		.progress-circleIr[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-masque,
+		.progress-circleIr[data-value^='100'] .progress-masque,
+		.progress-circleUv[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-masque,
+		.progress-circleUv[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-masque,
+		.progress-circleUv[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-masque,
+		.progress-circleUv[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-masque,
+		.progress-circleUv[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-masque,
+		.progress-circleUv[data-value^='100'] .progress-masque {
+		  clip: rect(auto, auto, auto, auto);
+		}
+
+		.progress-barreIr,.progress-barreuV
+		.progress-sup50 {
+		  position: absolute;
+		  box-sizing: border-box;         /* prise en compte bordure dans la dimension */
+		  border-width: .15em;            /* largeur bordure de la gauge */
+		  border-style: solid;
+		  border-color: #069;
+		  border-radius: 50%;             /* rendu aspect circulaire */
+		  width: 1.5em;                     /* largeur à 100% */
+		  height: 1.5em;                    /* hauteur à 100% */
+		  clip: rect(0, .75em, 1.5em, 0);    /* on ne garde que la partie gauche */
+		}
+
+		.progress-sup50 {
+		  display: none;
+		  clip: rect(0, 1.5em, 1.5em, .75em);
+		}
+
+		.progress-circleIr[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-sup50,
+		.progress-circleIr[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-sup50,
+		.progress-circleIr[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-sup50,
+		.progress-circleIr[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-sup50,
+		.progress-circleIr[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-sup50,
+		.progress-circleIr[data-value^='100'] .progress-sup50,
+		.progress-circleUv[data-value^='5']:not([data-value='5']):not([data-value^='5.']) .progress-sup50,
+		.progress-circleUv[data-value^='6']:not([data-value='6']):not([data-value^='6.']) .progress-sup50,
+		.progress-circleUv[data-value^='7']:not([data-value='7']):not([data-value^='7.']) .progress-sup50,
+		.progress-circleUv[data-value^='8']:not([data-value='8']):not([data-value^='8.']) .progress-sup50,
+		.progress-circleUv[data-value^='9']:not([data-value='9']):not([data-value^='9.']) .progress-sup50,
+		.progress-circleUv[data-value^='100'] .progress-sup50 {
+		  display:block;
+		}
+
+		.progress-circleIr:after, .progress-circleUv:after {
+		  content: attr(data-value);  /* récup. valeur de progression */
+		  font-size: 0.15em;              /* taille de la font en % du parent */
+		  height: 100%;                   /* centrage dans le parent */
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+
+		  /*-- pour effet shadow intérieur --*/
+		  border-radius: 50%;
+		  box-shadow: 0 0 .5em rgba(0, 0, 0, .5) inset;
+		}
+
+		.container{
+			position: relative;
+          height: 50%;
+           overflow: hidden;
+		}
+
+		#pump{
+			display: flex;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			background-color: #FF0000;
+			justify-content: center;
+			margin: auto;
+			box-shadow: 2.5px 2.5px 2.5px 5px rgba(255,0,0,0.6), 5px 5px 5px 5px rgba(0,0,0,0.8);
+		}
+
+		#temp, #hum {
+			font-size: 4em;
+			color: #00a2ff;
+		}
+		#soil1, #soil3,#one, #two, #three {
+			font-size: 4em;
+			color: #00ff22;
+		}
+		#soil2, #smoke {
+			font-size: 4em;
+			color: #ff7b00;
+		}
+		#one, #two, #three{
+			font-size: 2em;
+		}
+
+		/* Media queries */
+
+		@media (max-width: 1400px) {
+		#article, #aside {
+			width: 100%;
+		}
+		}
+
+		@media (max-width: 1100px) {
+			#article,#aside {
+			height: 1040px;
+			width: 100%;
+			margin-top: 20%;
+			}
+
+			.content {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+
+		@media (max-width: 890px) {
+			#article,#aside {
+			height: 1460px;
+			width: 100%;
+			margin-top: 70%;
+			}
+
+			.content {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+
+		@media (max-width: 810px) {
+			#article, #aside {
+				margin-top: 90%;
+			}
+		}
+
+		@media (max-width: 650px) {
+			/* #main {
+				flex-direction: column;
+			} */
+
+			#article, #aside {
+				height: 2930px;
+				width: 100%;
+				margin-top: 330%;
+			}
+
+			.content {
+				grid-template-columns: 1fr;
+			}
+
+			#one, #two, #three{
+			font-size: 48px;
+		}
+		}
+
+		@media (max-width: 640px) {
+			#article, #aside {
+				margin-top: 340%;
+			}
+		}
+
+		@media (max-width: 630px) {
+			#article, #aside {
+				margin-top: 350%;
+			}
+		}
+
+		@media (max-width: 620px) {
+			#article, #aside {
+				margin-top: 350%;
+			}
+		}
+
+		@media (max-width: 610px) {
+			#article, #aside {
+				margin-top: 360%;
+			}
+		}
+
+		@media (max-width: 600px) {
+			#article, #aside {
+				margin-top: 370%;
+			}
+		}
+
+		@media (max-width: 560px) {
+			#article, #aside {
+				margin-top: 380%;
+			}
+		}
+
+		@media (max-width: 550px) {
+			#article, #aside {
+				margin-top: 390%;
+			}
+		}
+
+		@media (max-width: 540px) {
+			#article, #aside {
+				margin-top: 400%;
+			}
+		}
+
+		@media (max-width: 520px) {
+			#article, #aside {
+				margin-top: 410%;
+			}
+		}
+
+		@media (max-width: 500px) {
+			#article, #aside {
+				margin-top: 420%;
+			}
+		}
+
+	</style>
+	<script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+	<h1 style="color: #222;">	<span id="one">Application</span><span id="two"> Clever</span><span id="three"> Tree</span></h1>
+	<div id="main">
+		<div id="article">
+			<div class="content">
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Capteur humidité du sol 1<br/><br/><br/><br/> <span id="soil1"></span></div>
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Capteur humidité du sol 2<br/><br/><br/><br/> <span id="soil2"></span></div>
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Capteur humidité du sol 3<br/><br/><br/><br/> <span id="soil3"></span></div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px;">
+					Niveau d'eau restant [%] <br/>
+					<div class="bubble-container">
+					  <div class="bubble">
+					    <div class="water-level"></div>
+					    <div class="tank"></div>
+					  </div>
+					</div>
+				</div>
+
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Etat de la pompe<br/><br/><br/><br/> <span id="pump"> </span><br/><br/></div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px; display: block;">
+					Vitesse du vent [Km/H]
+					<div class="container">
+					  <div class="gauge-a"></div>
+					  <div class="gauge-b"></div>
+					  <div class="gauge-cW"></div>
+					  <div class="gauge-data">
+					    <h1 id="wind"></h1>
+					  </div>
+					</div>
+				</div>
+
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">
+					Température [°C]<br/><br/><br/><br/>
+					<span id="temp"></span> 
+				</div>
+				<div style=" width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Humidité [%]<br/><br/><br/><br/> <span id="hum"></span></div>
+
+				<div style="height: 200px; width: 200px; border-radius: 25%; padding: 10px;">
+					IR<br/>
+					<div class="progress-circleIr" data-value=""></div>
+				</div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px;">
+					UV<br/>
+					<div class="progress-circleUv" data-value=""></div>
+				</div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px; display: block;">
+					Intensité lumineuse
+					<div class="container">
+					  <div class="gauge-a"></div>
+					  <div class="gauge-b"></div>
+					  <div class="gauge-cL"></div>
+					  <div class="gauge-data">
+					    <h1 id="light"></h1>
+					  </div>
+					</div>
+				</div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px; display: block;">
+					CO [ppm]
+					<div class="container">
+					  <div class="gauge-a"></div>
+					  <div class="gauge-b"></div>
+					  <div class="gauge-cC"></div>
+					  <div class="gauge-data">
+					    <h1 id="carbon"></h1>
+					  </div>
+					</div>
+				</div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px; display: block; position: relative;">
+					LPG [hPa]
+					<div class="container">
+					  <div class="gauge-a"></div>
+					  <div class="gauge-b"></div>
+					  <div class="gauge-cLPG"></div>
+					  <div class="gauge-data">
+					    <h1 id="lpg"></h1>
+					  </div>
+					</div>
+				</div>
+
+				<div style="width: 200px; height: 200px; border-radius: 25%; padding: 10px;">Fumée<br/><br/><br/><br/> <span id="smoke"></span></div>
+			</div>
+		</div>
+		<div id="aside">
+			<!-- <div style="margin: auto; width: 100%; display: flex; justify-content: center; margin-top: 50px; margin-bottom: -150px;"><img src="inno.png" alt="logo"></div> -->
+			<div id="content">
+				<h3>Activation de la pompe</h3>
+				<label class="toggle">
+				  <input type="checkbox">
+				  <span class="slider"></span>
+				  <span class="label-text">ON&nbsp;&nbsp;&nbsp;&nbsp;OFF</span>
+				</label>
+			</div>
+			
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	    function createJauge(elem) {
+		  if (elem) {
+		    // on commence par un clear
+		    while (elem.firstChild) {
+		      elem.removeChild(elem.firstChild);
+		    }
+		    // création des éléments
+		    var oMask  = document.createElement('DIV');
+		    var oBarre = document.createElement('DIV');
+		    var oSup50 = document.createElement('DIV');
+		    // affectation des classes
+		    oMask.className  = 'progress-masque';
+		    oBarre.className = 'progress-barreIr';
+		    oSup50.className = 'progress-sup50';
+		    // construction de l'arbre
+		    oMask.appendChild(oBarre);
+		    oMask.appendChild(oSup50);
+		    elem.appendChild(oMask);
+		  }
+		  return elem;
+		}
+
+		function createJauge2(elem) {
+		  if (elem) {
+		    // on commence par un clear
+		    while (elem.firstChild) {
+		      elem.removeChild(elem.firstChild);
+		    }
+		    // création des éléments
+		    var oMask  = document.createElement('DIV');
+		    var oBarre = document.createElement('DIV');
+		    var oSup50 = document.createElement('DIV');
+		    // affectation des classes
+		    oMask.className  = 'progress-masque';
+		    oBarre.className = 'progress-barreUv';
+		    oSup50.className = 'progress-sup50';
+		    // construction de l'arbre
+		    oMask.appendChild(oBarre);
+		    oMask.appendChild(oSup50);
+		    elem.appendChild(oMask);
+		  }
+		  return elem;
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+		    var oJauges = document.querySelectorAll('.progress-circleIr');
+		    var i, nb = oJauges.length;
+		    for( i=0; i < nb; i +=1){
+		      createJauge(oJauges[i]);
+		    }
+		});
+
+		document.addEventListener('DOMContentLoaded', function() {
+		    var oJauges = document.querySelectorAll('.progress-circleUv');
+		    var i, nb = oJauges.length;
+		    for( i=0; i < nb; i +=1){
+		      createJauge2(oJauges[i]);
+		    }
+		});
+
+	</script>
+
+	<script type="text/javascript">
+		const toggle = document.querySelector('.toggle input[type="checkbox"]');
+		$.ajaxSetup({timeout:1000});
+
+		toggle.addEventListener('change', function() {
+		  if (this.checked) {
+		    var xhttp = new XMLHttpRequest();
+		    xhttp.open("GET", "/update?state=01", true);
+		    xhttp.send();
+		    // toggle.parentNode.style.backgroundImage = "linear-gradient(to right, #008000, #32cd32, #9acd32, #556b2f)";
+		  } else {
+		    var xhttp = new XMLHttpRequest();
+		    xhttp.open("GET", "/update?state=00", true);
+		    xhttp.send();		    
+		    // toggle.parentNode.style.backgroundImage = "linear-gradient(to right, #a52a2a, #8b0000, #ff6347, #fa8072)";
+		  }
+		});
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+					var x = parseInt(this.responseText);
+					if(x == 1) {
+		            	document.getElementById("pump").style.backgroundColor = "#00FF00";
+						document.getElementById("pump").style.boxShadow = "2.5px 2.5px 2.5px 5px rgba(0,255,0,0.6), 5px 5px 5px 5px rgba(0,0,0,0.8)";
+					}else{
+						document.getElementById("pump").style.backgroundColor = "#FF0000";
+						document.getElementById("pump").style.boxShadow = "2.5px 2.5px 2.5px 5px rgba(255,0,0,0.6), 5px 5px 5px 5px rgba(0,0,0,0.8)";
+					}
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirPump", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+			// Récupération de la div contenant le niveau d'eau
+			var waterLevel = document.querySelector('.water-level');
+
+			// Récupération de la div contenant la valeur reçue
+			var valueDiv = document.querySelector('.tank');
+
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            //document.getElementById("tank").innerHTML = this.responseText;
+		            // Conversion des données en pourcentage de remplissage
+					  var fillPercentage = parseFloat(this.responseText);
+					  
+					  // Affichage de la valeur reçue
+					  var res = Math.round(this.responseText * 100)/100;
+					  valueDiv.textContent = res;
+
+					  // Mise à jour du niveau d'eau avec une transition CSS
+					  waterLevel.style.height = (fillPercentage - 10) + '%';
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirTank", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil1").innerHTML = this.responseText + '%';
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil1", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil2").innerHTML = this.responseText + '%';
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil2", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+			
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("soil3").innerHTML = this.responseText + '%';
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSoil3", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("temp").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirTemp", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("hum").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirHum", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            const value = this.responseText;
+				     // Calcul de la rotation de la jauge en fonction de la valeur
+				     const rotation = (value / 255) * 180;
+				     const gaugeC = document.querySelector('.gauge-cW');
+				     gaugeC.style.transform = `rotate(${rotation}deg)`;
+				     // Mise à jour de la valeur affichée
+				     const percent = document.querySelector('#wind');
+				     percent.textContent = `${value}`;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirWind", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+					var valeur = parseFloat(this.responseText);
+		            function initJauge(elem) {
+					  var oBarre;
+					  var angle;
+					  createJauge( elem);
+					  oBarre = elem.querySelector('.progress-barreIr');
+					  elem.setAttribute('data-value', valeur.toFixed(2));
+					  angle = 360 * valeur / 500;
+					  if (oBarre) {
+					    oBarre.style.transform = 'rotate(' + angle + 'deg)';
+					  }
+					}
+
+					  var oJauges = document.querySelectorAll('.progress-circleIr');
+					  var i, nb = oJauges.length;
+					  for (i = 0; i < nb; i += 1) {
+					    initJauge(oJauges[i]);
+					  }
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirIr", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+					var valeur = parseFloat(this.responseText);
+		            function initJauge2(elem) {
+					  var oBarre;
+					  var angle;
+					  createJauge2( elem);
+					  oBarre = elem.querySelector('.progress-barreUv');
+					  elem.setAttribute('data-value', valeur.toFixed(2));
+					  angle = 360 * valeur / 255;
+					  if (oBarre) {
+					    oBarre.style.transform = 'rotate(' + angle + 'deg)';
+					  }
+					}
+
+					  var oJauges = document.querySelectorAll('.progress-circleUv');
+					  var i, nb = oJauges.length;
+					  for (i = 0; i < nb; i += 1) {
+					    initJauge2(oJauges[i]);
+					  }
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirUv", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            const value = this.responseText;
+				     // Calcul de la rotation de la jauge en fonction de la valeur
+				     const rotation = (value / 255) * 180;
+				     const gaugeC = document.querySelector('.gauge-cL');
+				     gaugeC.style.transform = `rotate(${rotation}deg)`;
+				     // Mise à jour de la valeur affichée
+				     const percent = document.querySelector('#light');
+				     percent.textContent = `${value}`;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirLight", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            const value = this.responseText;
+				     // Calcul de la rotation de la jauge en fonction de la valeur
+				     const rotation = (value / 255) * 180;
+				     const gaugeC = document.querySelector('.gauge-cC');
+				     gaugeC.style.transform = `rotate(${rotation}deg)`;
+				     // Mise à jour de la valeur affichée
+				     const percent = document.querySelector('#carbon');
+				     percent.textContent = `${value}`;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirCarbon", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            const value = this.responseText;
+				     // Calcul de la rotation de la jauge en fonction de la valeur
+				     const rotation = (value / 255) * 180;
+				     const gaugeC = document.querySelector('.gauge-cLPG');
+				     gaugeC.style.transform = `rotate(${rotation}deg)`;
+				     // Mise à jour de la valeur affichée
+				     const percent = document.querySelector('#lpg');
+				     percent.textContent = `${value}`;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirLpg", true);
+		    xhttp.send();
+		}, 2000);
+
+		setInterval(function ()
+		{
+		    var xhttp = new XMLHttpRequest();
+
+		    xhttp.onreadystatechange = function()
+		    {
+		        if(this.readyState == 4 && this.status == 200)
+		        {
+		            document.getElementById("smoke").innerHTML = this.responseText;
+		        }
+		    };
+
+		    xhttp.open("GET", "/lirSmoke", true);
+		    xhttp.send();
+		}, 2000);
+
+	</script>
+
+</body>
+</html>

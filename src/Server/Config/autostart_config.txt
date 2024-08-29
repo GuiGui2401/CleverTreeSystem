@@ -1,0 +1,27 @@
+//procédure pour lancer un script python au demarrage de l'ordinateur
+
+- Créer un script shell à exécuter
+           cd /home/pi
+           nano start.sh
+
+- Ecrire les commandes dans le fichier sh
+           sudo python /home/pi/shp/Raspberry/socketserver.py
+
+- Donner les droits d'exécution au fichier python
+           sudo chmod +x /home/pi/shp/Raspberry/socketserver.py
+
+- Rendre le fichier sh exécutable
+            chmod 755 lancement.sh
+
+- Créer un fichier de logs
+             mkdir /home/pi/logs
+
+- Ajouter dans le crontab
+             sudo crontab -e
+             selectionner nano en saisissant 1
+             En bas du fichier saisir :
+                        @reboot sh /home/pi/start.sh > /home/pi/logs/log.txt 2>&1
+              sauvegarder avec ctrl+x
+
+- Redemarrez le Raspberry pour voir l'exécution du script
+              reboot

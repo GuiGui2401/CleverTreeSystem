@@ -1,0 +1,49 @@
+1. Ouvrez le terminal sur votre Raspberry Pi.
+
+2. Tapez les commandes suivantes pour mettre à jour les paquets get: sudo apt-get update puis sudo apt-get upgrade
+
+3. Tapez les commandes suivantes pour mettre à jour les paquets simple: sudo apt update puis sudo apt upgrade
+
+4. Tapez la commande suivante pour installer Apache : sudo apt install apache2
+
+5.Une fois l'installation effectuée, on modifie les droits d'accès au dossier /var/www/html/. On fait également en sorte (à l'aide de la commande chown) que ce dossier devienne la propriété de l'utilisateur pi (et non plus de root) et du groupe ww-data. En effet, c'est dans ce répertoire qu'on placera nos pages php écrite en tant qu'utilisateur pi. Il est donc nécessaire qu'on possède les droits d'accès correspondants
+
+sudo chown -R pi:www-data /var/www/html/
+sudo chmod -R 770 /var/www/html/ 
+
+Il est souhaitable à ce stade de rebooter le raspberry afin que ces changements soient pris en compte.
+
+6. Une fois le raspberry redemarrer, vous pouvez vérifier si Apache est en cours d'exécution en tapant l'adresse IP de votre Raspberry Pi dans un navigateur Web.
+
+7. Tapez la commande suivante pour installer PHP : sudo apt install php
+
+8. Tapez la commande suivante pour installer MySQL : sudo apt-get install mariadb-server mariadb-client
+
+Pour vérifier que Le SGBD MariaDB est bien installé on tape
+sudo mariadb--user=root
+
+On tape les commandes suivantes qui permettent de:
+1) supprimer le compte utilisateur root@localhost;
+2) créer le compte utilisateur root@localhost associé au mot de passe de notre choix;
+3) accorder tous les droits à cet utilisateur. 
+
+DROP USER 'root'@'localhost';
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'InnoTechLab237';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'; 
+
+9. Vous pouvez maintenant accéder à MariaDB en utilisant la commande suivante :
+   mariadb -u root -p InnoTechLab237
+
+10. Tapez la commande suivante pour installer phpMyAdmin : sudo apt install phpmyadmin
+
+Lorsque pendant l'installation on pose une question répondre par non
+
+On teste le fonctionnement de phpmyadmin en saisissant http://127.0.0.1/phpmyadmin dans la barre d'adresse de chromium
+
+Si on obtient aucune réponse il faut taper : sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+
+Si ensuite on obtient le message phpmyadmin-error il faut taper : sudo systemctl restart apache2 et là on ne peut plus avoir d'erreur
+
+11. En étant dans la page on se connecte alors en saisissant "root" pour le username et "InnoTechLab237" pour le password puis on crée une nouvelle bd avec le nom clever_tree et on importe le fichier clever_tree.sql qui a le code de notre base de données en allant sur l'onglet import
+
+12. on tape la commande suivante pour installer mariadb pour python : sudo pip install mariadb
