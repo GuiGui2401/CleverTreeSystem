@@ -117,7 +117,7 @@ def StartMariaDBServer():
     if(sys.argv[1] != "-without" and sys.argv[2] !="mariaDB"):
         
         try :
-            mydb = mariadb.connect(user='root', password='InnoTechLab237', host="127.0.0.1", port=3306, database='clever_tree')
+            mydb = mariadb.connect(user='your_user', password='your_password', host="127.0.0.1", port=3306, database='clever_tree')
             mycursor = mydb.cursor()
             return mycursor, mydb
         except mariadb.Error as e:
